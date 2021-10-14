@@ -1,10 +1,14 @@
-let notes = ['a note!', 'another note.', 'more note...']
+// TODO: Add DELETE button / functionality to each note
+// TODO: Add some styles
+
+let notes = []
 
 const generateNotes = () => {
+    const localStorage = window.localStorage // localStorage is an object
     const display = document.getElementById('display')
     const options = document.getElementById('options')
-    const allNotes = document.createElement('ul')
-    display.append(allNotes)
+    // const allNotes = document.createElement('ul')
+    // display.append(allNotes)
 
     const notebook = document.createElement('div');
     notebook.id = 'notebook';
@@ -13,11 +17,23 @@ const generateNotes = () => {
     notebook.style.border = `4px solid ${appList[0].color}`
     display.append(notebook)
 
+    const renderNotes = () => {
+        const saved = localStorage.getItem('notes')
+        if (saved) {
+            let savedNotes = JSON.parse(saved);
+            savedNotes.forEach(note => {
+                let formattedNote = formatNote(note)
+                notebook.append(formattedNote)
+            })
+        }
+    }
+
     const formatNote = note => {
         let formattedNote = document.createElement('div')
         formattedNote.id = note.id
         formattedNote.innerHTML = note.text
         formattedNote.className = 'note'
+        return formattedNote
     }
 
     const addNote = text => {
@@ -25,8 +41,13 @@ const generateNotes = () => {
             text: text,
             id: Date.now()
         }
-
-        notes.push(note.text)
+        notes.push(note)
+        //TODO: make notes persist between renders
+        //! every time we refresh, notes array is reset to empty and then saved into localStorage ()
+        localStorage.setItem('notes', JSON.stringify(notes)) // can't send an array, gotta change it to JSON
+        const formattedNote = formatNote(note)
+        notebook.append(formattedNote)
+        renderNotes()
     }
 
     const form = document.createElement('form')
@@ -44,7 +65,7 @@ const generateNotes = () => {
         e.preventDefault()
 
         const text = input.value.trim(); // trim() removes trailing spaces
-        alert(text)
+        addNote(text)
         input.value = ''
     })
 
@@ -55,5 +76,5 @@ const generateNotes = () => {
     //     allNotes.append(li)
     // })
 
-    display.append(form)
+    options.append(form)
 }

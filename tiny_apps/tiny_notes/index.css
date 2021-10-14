@@ -1,0 +1,17 @@
+#notebook {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.note {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: left;
+    font-size: 1rem;
+    margin: 0 0 1rem 0;
+    height: 20%; /* 20% of div */
+    border: 1px solid #eaeaea;
+    border-radius: .25rem;
+    padding: 1rem;
+}
